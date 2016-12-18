@@ -1,0 +1,31 @@
+#!/bin/bash
+
+TIME_OUT=30
+
+# TODO double check master password option for first password generation domain
+
+# check syntax
+if [ "$#" -ne 1 ];
+then
+	echo Usage: pwmac domain
+	exit 1
+fi
+
+# get domain from args
+domain=$1
+
+# read master password from stdin
+echo -n master password: 
+read -s password
+echo
+
+# generate domain password
+echo -n "$domain" | openssl dgst -sha1 -hmac "$password" -binary | openssl enc -A -base64 | head -c 8 #| less
+
+# wait for key press or timeout
+read -t $TIME_OUT -s -n1
+
+# delete domain password from screen
+echo -ne "\r\033[0K"
+
+
