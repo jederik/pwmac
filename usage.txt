@@ -12,6 +12,11 @@ Options:
 -t timeout
 	Delete domain password from screen after timeout seconds. Default is 30.
 
+-c
+	Lets the user confirm the master password. This is recommended when
+	generating a password with the purpose of setting it for the first time
+	for that domain.
+
 -h
 	Display this message and exit.
 
