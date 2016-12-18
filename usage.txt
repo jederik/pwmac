@@ -1,0 +1,17 @@
+
+pwmac - Generate a domain specific password from a master password.
+
+Usage:
+pwmac [-t timeout] domain
+pwmac -h
+
+domain is any arbitrary string, that describes the domain the password is meant
+for (e.g. domain.name or user@domain.name).
+
+Options:
+-t timeout
+	Delete domain password from screen after timeout seconds. Default is 30.
+
+-h
+	Display this message and exit.
+

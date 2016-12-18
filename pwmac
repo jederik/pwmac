@@ -3,11 +3,18 @@
 TIME_OUT=30
 
 # parse options
-while getopts ":t:" opt
+while getopts ":ht:c" opt
 do
 	case $opt in
+		h)
+			cat usage.txt
+			exit 0
+			;;
 		t)
 			TIME_OUT=$OPTARG
+			;;
+		c)
+			confirm=true
 			;;
 		\?)
 			echo "Invalid option: -$OPTARG" >&2
@@ -31,12 +38,21 @@ fi
 shift $((OPTIND-1))
 domain=$1
 
-# TODO double check master password option for first password generation domain
-
 # read master password from stdin
-echo -n master password: 
+echo -n "master password: "
 read -s password
 echo
+if [ "$confirm" = true ]
+then
+	echo -n "confirm master password: "
+	read -s confirmed_password
+	echo
+	if [ "$confirmed_password" != "$password" ]
+	then
+		echo "Passwords don't match." >&2
+		exit 1
+	fi
+fi
 
 # generate domain password
 echo -n "$domain" | openssl dgst -sha1 -hmac "$password" -binary | openssl enc -A -base64 | head -c 8 #| less
