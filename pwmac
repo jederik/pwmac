@@ -2,17 +2,36 @@
 
 TIME_OUT=30
 
-# TODO double check master password option for first password generation domain
+# parse options
+while getopts ":t:" opt
+do
+	case $opt in
+		t)
+			TIME_OUT=$OPTARG
+			;;
+		\?)
+			echo "Invalid option: -$OPTARG" >&2
+			exit 1
+			;;
+		:)
+			echo "Option -$OPTARG requires an argument" >&2
+			exit 1
+			;;
+	esac
+done
 
 # check syntax
-if [ "$#" -ne 1 ];
+if [ "$#" -ne $OPTIND ];
 then
-	echo Usage: pwmac domain
+	echo "No domain specified." >&2
 	exit 1
 fi
 
 # get domain from args
+shift $((OPTIND-1))
 domain=$1
+
+# TODO double check master password option for first password generation domain
 
 # read master password from stdin
 echo -n master password: 
