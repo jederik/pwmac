@@ -18,6 +18,10 @@ Options:
 	generating a password with the purpose of setting it for the first time
 	for that domain.
 
+-x
+	Silent mode. Copy domain password to X clipboard instead of displaying
+	it
+
 -h
 	Display this message and exit.
 

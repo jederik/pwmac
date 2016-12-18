@@ -1,29 +1,41 @@
 #!/bin/bash
 
-TIME_OUT=30
+# constants
+PWMAC_DIR=/home/jederik/dev/tools/pwmac
+USAGE_FILE=$PWMAC_DIR/usage.txt
+
+# default values
+timeout=30
+
+function usage {
+	cat $USAGE_FILE
+}
 
 # parse options
-while getopts ":ht:c" opt
+while getopts ":ht:cx" opt
 do
 	case $opt in
 		h)
-			cat usage.txt
+			usage
 			exit 0
 			;;
 		t)
-			TIME_OUT=$OPTARG
+			timeout=$OPTARG
 			;;
 		c)
 			confirm=true
 			;;
+		x)
+			silent=true
+			;;
 		\?)
 			echo "Invalid option: -$OPTARG" >&2
-			cat usage.txt
+			usage
 			exit 1
 			;;
 		:)
 			echo "Option -$OPTARG requires an argument" >&2
-			cat usage.txt
+			usage
 			exit 1
 			;;
 	esac
@@ -57,10 +69,21 @@ then
 fi
 
 # generate domain password
-echo -n "$domain" | openssl dgst -sha1 -hmac "$password" -binary | openssl enc -A -base64 | head -c 8 #| less
+domain_pwd=`echo -n "$domain" | openssl dgst -sha1 -hmac "$password" -binary | openssl enc -A -base64 | head -c 8`
+
+# when in silent mode copy domain password to clipboard
+if [ "$silent" = true ]
+then
+	echo -n "$domain_pwd" | xclip
+	echo -n "$domain_pwd" | xclip -selection c
+	exit 0
+fi
+
+# display domain password
+echo -n "$domain_pwd"
 
 # wait for key stroke or timeout
-read -t $TIME_OUT -s -n1
+read -t $timeout -s -n1
 
 # remove domain password from screen
 echo -ne "\r\033[0K"
