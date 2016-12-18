@@ -3,9 +3,13 @@
 TIME_OUT=30
 
 # parse options
-while getopts ":t:" opt
+while getopts ":ht:" opt
 do
 	case $opt in
+		h)
+			cat usage.txt
+			exit 0
+			;;
 		t)
 			TIME_OUT=$OPTARG
 			;;
