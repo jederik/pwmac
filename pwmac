@@ -18,23 +18,23 @@ do
 			;;
 		\?)
 			echo "Invalid option: -$OPTARG" >&2
+			cat usage.txt
 			exit 1
 			;;
 		:)
 			echo "Option -$OPTARG requires an argument" >&2
+			cat usage.txt
 			exit 1
 			;;
 	esac
 done
 
-# check syntax
+# get domain from args
 if [ "$#" -ne $OPTIND ];
 then
 	echo "No domain specified." >&2
 	exit 1
 fi
-
-# get domain from args
 shift $((OPTIND-1))
 domain=$1
 
@@ -42,6 +42,8 @@ domain=$1
 echo -n "master password: "
 read -s password
 echo
+
+# evtl. confirm master password
 if [ "$confirm" = true ]
 then
 	echo -n "confirm master password: "
@@ -57,10 +59,9 @@ fi
 # generate domain password
 echo -n "$domain" | openssl dgst -sha1 -hmac "$password" -binary | openssl enc -A -base64 | head -c 8 #| less
 
-# wait for key press or timeout
+# wait for key stroke or timeout
 read -t $TIME_OUT -s -n1
 
-# delete domain password from screen
+# remove domain password from screen
 echo -ne "\r\033[0K"
-
 
