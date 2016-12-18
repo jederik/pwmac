@@ -3,7 +3,7 @@
 TIME_OUT=30
 
 # parse options
-while getopts ":ht:" opt
+while getopts ":ht:c" opt
 do
 	case $opt in
 		h)
@@ -13,42 +13,55 @@ do
 		t)
 			TIME_OUT=$OPTARG
 			;;
+		c)
+			confirm=true
+			;;
 		\?)
 			echo "Invalid option: -$OPTARG" >&2
+			cat usage.txt
 			exit 1
 			;;
 		:)
 			echo "Option -$OPTARG requires an argument" >&2
+			cat usage.txt
 			exit 1
 			;;
 	esac
 done
 
-# check syntax
+# get domain from args
 if [ "$#" -ne $OPTIND ];
 then
 	echo "No domain specified." >&2
 	exit 1
 fi
-
-# get domain from args
 shift $((OPTIND-1))
 domain=$1
 
-# TODO double check master password option for first password generation domain
-
 # read master password from stdin
-echo -n master password: 
+echo -n "master password: "
 read -s password
 echo
+
+# evtl. confirm master password
+if [ "$confirm" = true ]
+then
+	echo -n "confirm master password: "
+	read -s confirmed_password
+	echo
+	if [ "$confirmed_password" != "$password" ]
+	then
+		echo "Passwords don't match." >&2
+		exit 1
+	fi
+fi
 
 # generate domain password
 echo -n "$domain" | openssl dgst -sha1 -hmac "$password" -binary | openssl enc -A -base64 | head -c 8 #| less
 
-# wait for key press or timeout
+# wait for key stroke or timeout
 read -t $TIME_OUT -s -n1
 
-# delete domain password from screen
+# remove domain password from screen
 echo -ne "\r\033[0K"
-
 
