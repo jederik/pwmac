@@ -42,6 +42,13 @@ do
 	esac
 done
 
+# check requirements
+if ! hash openssl 2>/dev/null
+then
+	echo "openssl missing. pwmac requires openssl." >&2
+	exit 1
+fi
+
 # get domain from args
 if [ "$#" -ne $OPTIND ];
 then
@@ -75,6 +82,11 @@ domain_pwd=`echo -n "$domain" | openssl dgst -sha1 -hmac "$password" -binary | o
 # when in silent mode copy domain password to clipboard
 if [ "$silent" = true ]
 then
+	if ! hash xclip 2>/dev/null
+	then
+		echo "xclip is not installed. The -x option requires xclip." >&2
+		exit 1
+	fi
 	echo -n "$domain_pwd" | xclip
 	echo -n "$domain_pwd" | xclip -selection c
 	exit 0
