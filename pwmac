@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # constants
-PWMAC_DIR=/home/jederik/dev/tools/pwmac
+SCRIPT_LOCATION=$(readlink -f "$0")
+PWMAC_DIR=$(dirname "$SCRIPT_LOCATION")
 USAGE_FILE=$PWMAC_DIR/usage.txt
 
 # default values
