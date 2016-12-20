@@ -13,6 +13,7 @@ pwmac \- generate domain specific passwords from a master password
 .B ] [-c] [-x] 
 .I domain
 .br
+.B pwmac -h
 
 .SH DESCRIPTION
 .B pwmac
@@ -29,6 +30,7 @@ generates different domain passwords no matter how similar they are and no matte
 
 .SS Security Considerations
 \fBpwmac\fP uses the \fBopenssl\fP tool to generate a SHA-1 HMAC from \fIdomain\fP using the master password as the key.
+The generated MAC is then encoded in \fBbase64\fP and cropped to the desired length.
 
 Note that an attacker who compromises the master password is able to forge \fBany\fP domain password generated with this master password. 
 Given the security of the underlying cryptography it is impossible to derive the master password from the generated domain password and/or the domain descriptor. 
@@ -36,25 +38,27 @@ It is, however, possible to perform an offline brute force attack on the master 
 It is thus of high importance to choose a master password that contains enough entropy to resist a brute force attack.
 
 .SH OPTIONS
-.TP
-\fB\-t \fItimeout\fP
-Display the generated password for a maximum of
-.I timeout
-seconds on the screen. Default vallue is 30.
-
 .TP  
 \fB\-c\fP  
-Have the user repeat the master password. This is usefull when setting the password for this domain.
-
-.TP  
-\fB\-x\fP  
-Do not display the generated password on the screen, but instead copy it to the X clipboard. This option requires
-.B xclip
-to be installed.
+Have the user repeat the master password. This is usefull to beware of typos when setting the password for this domain.
 
 .TP  
 \fB\-h\fP  
 Print a help text on the screen.
+
+.TP
+\fB\-l \fIlength\fP
+Specify the length of the generated password. Default is 8.
+
+.TP
+\fB\-t \fItimeout\fP
+Display the generated password for a maximum of \fItimeout\fP seconds on the screen. Default value is 30.
+
+This option is ignored when \fB-x\fP is specified.
+
+.TP  
+\fB\-x\fP  
+Do not display the generated password on the screen, but instead copy it to the X clipboard. This option requires \fBxclip\fP to be installed.
 
 .SH AUTHOR
 Jann-Frederik Laß <jederik@gmail.com>
