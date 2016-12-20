@@ -6,6 +6,7 @@ PWMAC_DIR=$(dirname "$SCRIPT_LOCATION")
 USAGE_FILE=$PWMAC_DIR/usage.txt
 
 # default values
+length=8
 timeout=30
 
 function usage {
