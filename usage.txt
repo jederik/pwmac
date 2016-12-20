@@ -2,7 +2,7 @@
 pwmac - Generate a domain specific password from a master password.
 
 Usage:
-pwmac [-t timeout] domain
+pwmac [-t timeout] [-c] [-x] domain
 pwmac -h
 
 Description:
