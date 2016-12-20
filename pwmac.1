@@ -1,0 +1,53 @@
+.\"Created with GNOME Manpages Editor
+.\"http://sourceforge.net/projects/gmanedit2
+
+.\"Replace <program> with the program name, x with the Section Number
+.TH "pwmac" 1 "DECEMBER 2016" "jederik" "User Manuals"
+
+.SH NAME
+pwmac \- generate domain specific passwords from a master password
+
+..SH SYNOPSIS
+.B pwmac [-t 
+.I timeout
+.B ] [-c] [-x] 
+.I domain
+.br
+
+.SH DESCRIPTION
+.B pwmac
+can be used to generate a password for any domain from a master password.
+In contrast to a keystore, it does not save the domain specific passwords, but by remembering
+the master password it is possible to generate the same domain password from the master password
+and the domain descriptor.
+
+.I domain
+can be any string that describes the domain for which a password should be created. For different
+domain descriptors
+.B pwmac
+generates different domain passwords no matter how similar they are and no matter if the master password is the same.
+
+.SH OPTIONS
+.TP
+\fB\-t \fItimeout\fP
+Display the generated password for a maximum of
+.I timeout
+seconds on the screen. Default vallue is 30.
+
+.TP  
+\fB\-c\fP  
+Have the user repeat the master password. This is usefull when setting the password for this domain.
+
+.TP  
+\fB\-x\fP  
+Do not display the generated password on the screen, but instead copy it to the X clipboard. This option requires
+.B xclip
+to be installed.
+
+.TP  
+\fB\-h\fP  
+Print a help text on the screen.
+
+.SH AUTHOR
+Jann-Frederik Laß <jederik@gmail.com>
+
