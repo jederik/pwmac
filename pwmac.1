@@ -17,15 +17,23 @@ pwmac \- generate domain specific passwords from a master password
 .SH DESCRIPTION
 .B pwmac
 can be used to generate a password for any domain from a master password.
-In contrast to a keystore, it does not save the domain specific passwords, but by remembering
-the master password it is possible to generate the same domain password from the master password
-and the domain descriptor.
+In contrast to a keystore, it does not save the domain specific passwords on a hard drive, but when given
+the same master password and domain descriptor it generates the same domain password.
+This prevents the user from having to copy his keystore to every device he uses and from the risk through data loss.
 
 .I domain
 can be any string that describes the domain for which a password should be created. For different
 domain descriptors
 .B pwmac
 generates different domain passwords no matter how similar they are and no matter if the master password is the same.
+
+.SS Security Considerations
+\fBpwmac\fP uses the \fBopenssl\fP tool to generate a SHA-1 HMAC from \fIdomain\fP using the master password as the key.
+
+Note that an attacker who compromises the master password is able to forge \fBany\fP domain password generated with this master password. 
+Given the security of the underlying cryptography it is impossible to derive the master password from the generated domain password and/or the domain descriptor. 
+It is, however, possible to perform an offline brute force attack on the master password when these two other factors are known.
+It is thus of high importance to choose a master password that contains enough entropy to resist a brute force attack.
 
 .SH OPTIONS
 .TP
