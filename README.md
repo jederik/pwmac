@@ -1,4 +1,5 @@
 # pwmac
+a stateless password manager
 ## Intro
 pwmac ist a bash script that uses openssl's HMAC function to generate for any domain (e.g. github.com) a domain specific password from one single master password. That way domain passwords don't need to be remembered or stored in a keystore.
 
