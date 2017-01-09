@@ -26,6 +26,12 @@ Options:
 	Silent mode. Copy domain password to X clipboard instead of displaying
 	it
 
+-s
+	Read master password from stdin and print to stdout only the resulting
+	domain password without prompt or trailing newline. This option enables
+	using pwmac in pipes, which might come in handy for
+	scripting.
+
 -h
 	Display this message and exit.
 

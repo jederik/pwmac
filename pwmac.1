@@ -12,7 +12,7 @@ pwmac \- generate domain specific passwords from a master password
 .I timeout
 .B ] [-c] [-l
 .I length
-.B ] [-x] 
+.B ] [-s] [-x] 
 .I domain
 .br
 .B pwmac -h
@@ -51,6 +51,11 @@ Print a help text on the screen.
 .TP
 \fB\-l \fIlength\fP
 Specify the length of the generated password. Default is 8.
+
+.TP
+\fB\-s\fP
+Read master password from stdin and print to stdout only the resulting domain password without prompt or trailing newline.
+This option enables using pwmac in pipes, which might come in handy for scripting.
 
 .TP
 \fB\-t \fItimeout\fP

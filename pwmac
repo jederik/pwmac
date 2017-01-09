@@ -14,7 +14,7 @@ function usage {
 }
 
 # parse options
-while getopts ":ht:cxl:" opt
+while getopts ":ht:cxl:s" opt
 do
 	case $opt in
 		h)
@@ -32,6 +32,9 @@ do
 			;;
 		l)
 			length=$OPTARG
+			;;
+		s)
+			stdio=true
 			;;
 		\?)
 			echo "Invalid option: -$OPTARG" >&2
@@ -53,6 +56,13 @@ then
 	exit 1
 fi
 
+# check options consistency
+if [ "$confirm" = true ] && [ "$stdio" = true ]
+then
+	echo "Options -s and -c cannot be combined." >&2
+	exit 1
+fi
+
 # get domain from args
 if [ "$#" -ne $OPTIND ];
 then
@@ -63,9 +73,14 @@ shift $((OPTIND-1))
 domain=$1
 
 # read master password from stdin
-echo -n "master password: "
-read -s password
-echo
+if [ "$stdio" = true ]
+then
+	read -s password
+else
+	echo -n "master password: "
+	read -s password
+	echo
+fi
 
 # evtl. confirm master password
 if [ "$confirm" = true ]
@@ -82,6 +97,13 @@ fi
 
 # generate domain password
 domain_pwd=`echo -n "$domain" | openssl dgst -sha1 -hmac "$password" -binary | openssl enc -A -base64 | head -c $length`
+
+# when in pipe mode exit
+if [ "$stdio" = true ]
+then
+	echo -n $domain_pwd
+	exit 0
+fi
 
 # when in silent mode copy domain password to clipboard
 if [ "$silent" = true ]
